@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>D'ôce Geladinho Gourmet | Geladinho cremoso em São Félix do Coribe</title>
-<meta name="description" content="Geladinho gourmet artesanal em São Félix do Coribe, Santa Maria da Vitória e Correntina. 12 sabores cremosos, R$ 7,50 cada. Monte seu pedido e envie pelo WhatsApp.">
+<meta name="description" content="Geladinho gourmet artesanal em São Félix do Coribe e Santa Maria da Vitória. 12 sabores cremosos, R$ 7,50 cada. Monte seu pedido e envie pelo WhatsApp.">
 <meta name="theme-color" content="#D23A70">
 <link rel="canonical" href="https://docegeladinho-blip.github.io/">
 <meta property="og:type" content="website">
@@ -24,7 +24,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="img/morango-cravejado.webp">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FoodEstablishment","name":"D'ôce Geladinho Gourmet","url":"https://docegeladinho-blip.github.io/","image":"https://docegeladinho-blip.github.io/og-image.jpg","telephone":"+5577998689471","priceRange":"R$","servesCuisine":"Sobremesas","address":{"@type":"PostalAddress","addressLocality":"São Félix do Coribe","addressRegion":"BA","addressCountry":"BR"},"areaServed":["São Félix do Coribe","Santa Maria da Vitória","Correntina"],"sameAs":["https://instagram.com/d.oce_geladinhogourmet"]}
+{"@context":"https://schema.org","@type":"FoodEstablishment","name":"D'ôce Geladinho Gourmet","url":"https://docegeladinho-blip.github.io/","image":"https://docegeladinho-blip.github.io/og-image.jpg","telephone":"+5577998689471","priceRange":"R$","servesCuisine":"Sobremesas","address":{"@type":"PostalAddress","addressLocality":"São Félix do Coribe","addressRegion":"BA","addressCountry":"BR"},"areaServed":["São Félix do Coribe","Santa Maria da Vitória"],"sameAs":["https://instagram.com/d.oce_geladinhogourmet"]}
 </script>
 <style>
 :root{
@@ -269,6 +269,7 @@ dialog h2{font-family:'Yellowtail','Brush Script MT',cursive;font-weight:400;fon
 .itens{list-style:none;margin:18px 0 12px}
 .itens li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--rosa);font-weight:600}
 .resumo{display:flex;justify-content:space-between;font-weight:800;font-size:1.2rem;margin:6px 0}
+.resumo-leve{font-weight:600;font-size:1rem}
 .aviso{font-weight:700;color:var(--framboesa-escura);margin-bottom:14px;font-size:.98rem}
 .aviso.ok{color:var(--verde-wa)}
 label{display:block;font-weight:700;margin:12px 0 6px}
@@ -333,8 +334,8 @@ dialog .botao{width:100%;margin-top:20px}
       <div class="cardapio-topo">
         <h2 class="titulo" id="t-cardapio">Escolha seus sabores</h2>
         <ul class="regras">
-          <li>Pedido mínimo: 8 unidades</li>
-          <li>Frete grátis a partir de 20</li>
+          <li>Pedido mínimo: 5 unidades</li>
+          <li>Frete R$ 15,00 · grátis a partir de 20 unidades</li>
         </ul>
       </div>
       <div class="sabores">
@@ -430,7 +431,7 @@ dialog .botao{width:100%;margin-top:20px}
   <div class="miolo">
     <div>
       <p class="marca">D'ôce</p>
-      <small>Geladinho gourmet em São Félix do Coribe, Santa Maria da Vitória e Correntina, Bahia.</small>
+      <small>Geladinho gourmet em São Félix do Coribe e Santa Maria da Vitória, Bahia. Também à venda em Correntina.</small>
     </div>
     <nav aria-label="Contato">
       <a href="https://wa.me/5577998689471" target="_blank" rel="noopener">WhatsApp (77) 99868-9471</a>
@@ -458,14 +459,14 @@ dialog .botao{width:100%;margin-top:20px}
   <button class="fechar" type="button" id="fecharRevisao" aria-label="Fechar">×</button>
   <h2 id="t-revisao">Seu pedido</h2>
   <ul class="itens" id="itens"></ul>
-  <div class="resumo"><span id="resumoQtd"></span><span id="resumoValor"></span></div>
+  <div class="resumo resumo-leve"><span id="resumoQtd"></span><span id="resumoValor"></span></div>
+  <div class="resumo resumo-leve"><span>Frete</span><span id="resumoFrete"></span></div>
+  <div class="resumo"><span>Total</span><span id="resumoTotal"></span></div>
   <p class="aviso" id="aviso"></p>
   <label for="cidade">Entregar em</label>
   <select id="cidade">
     <option>São Félix do Coribe</option>
     <option>Santa Maria da Vitória</option>
-    <option>Correntina</option>
-    <option>Outra cidade</option>
   </select>
   <label for="nome">Seu nome (opcional)</label>
   <input id="nome" type="text" autocomplete="given-name" placeholder="Como podemos te chamar?">
@@ -474,7 +475,7 @@ dialog .botao{width:100%;margin-top:20px}
 
 <script>
 (function(){
-  var PRECO = 7.5, MINIMO = 8, FRETE_GRATIS = 20;
+  var PRECO = 7.5, MINIMO = 5, FRETE = 15, FRETE_GRATIS = 20;
   var NUMERO = '5577998689471';
   var qtd = {};
   var cards = document.querySelectorAll('.sabor');
@@ -485,9 +486,11 @@ dialog .botao{width:100%;margin-top:20px}
 
   function total(){ var t=0; for (var k in qtd) t+=qtd[k]; return t; }
 
+  function frete(t){ return t >= FRETE_GRATIS ? 0 : FRETE; }
+
   function dica(t){
     if (t < MINIMO) return 'Faltam ' + (MINIMO - t) + ' para o pedido mínimo';
-    if (t < FRETE_GRATIS) return 'Faltam ' + (FRETE_GRATIS - t) + ' para o frete grátis';
+    if (t < FRETE_GRATIS) return 'Frete ' + reais(FRETE) + ' · faltam ' + (FRETE_GRATIS - t) + ' para o frete grátis';
     return 'Frete grátis garantido';
   }
 
@@ -521,8 +524,10 @@ dialog .botao{width:100%;margin-top:20px}
     });
     document.getElementById('resumoQtd').textContent = t + ' unidades';
     document.getElementById('resumoValor').textContent = reais(t * PRECO);
+    document.getElementById('resumoFrete').textContent = frete(t) ? reais(frete(t)) : 'grátis';
+    document.getElementById('resumoTotal').textContent = reais(t * PRECO + frete(t));
     var aviso = document.getElementById('aviso');
-    aviso.textContent = t < MINIMO ? 'Faltam ' + (MINIMO - t) + ' para o pedido mínimo de ' + MINIMO + ' unidades.' : (t >= FRETE_GRATIS ? 'Frete grátis garantido.' : dica(t) + '.');
+    aviso.textContent = t < MINIMO ? 'Faltam ' + (MINIMO - t) + ' para o pedido mínimo de ' + MINIMO + ' unidades.' : dica(t) + '.';
     aviso.classList.toggle('ok', t >= MINIMO);
     var enviar = document.getElementById('enviar');
     enviar.setAttribute('aria-disabled', t < MINIMO ? 'true' : 'false');
@@ -536,7 +541,9 @@ dialog .botao{width:100%;margin-top:20px}
       if (n) linhas.push(n + 'x ' + c.dataset.nome);
     });
     var t = total();
-    linhas.push('', 'Total: ' + t + ' unidades (' + reais(t * PRECO) + ')');
+    linhas.push('', t + ' unidades: ' + reais(t * PRECO));
+    linhas.push('Frete: ' + (frete(t) ? reais(frete(t)) : 'grátis'));
+    linhas.push('Total: ' + reais(t * PRECO + frete(t)));
     linhas.push('Entrega em: ' + document.getElementById('cidade').value);
     var nome = document.getElementById('nome').value.trim();
     if (nome) linhas.push('Nome: ' + nome);
